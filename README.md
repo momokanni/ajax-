@@ -49,10 +49,11 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
 ```            
 >3. 被调用方支持跨域。  
     由被调用的服务器在响应头中增加响应字段，告知浏览器允许请求跨域。直接从浏览器发起请求。  
-    **注：** 此解决方式下，浏览器判断是否为简单请求，是则**先执行后判断**，就是请求会正常发送到服务器，服务器响应也是正常200，后续的跨域问题由浏览器校验判断Response Header中有无Origin得出。     简单请求: 
+    **注：** 此解决方式下，浏览器判断是否为简单请求，是则**先执行后判断**，就是请求会正常发送到服务器，服务器响应也是正常200，后续的跨域问题由浏览器校验判断Response Header中有无Origin得出。   
+    **简单请求:** 
       方法：GET，POST，HEAD  
       请求header里无自定义头，Content-Type为：application/x-www-from-urlencoded,multipart/from-data,text/plain  
-    非简单请求:  
+    **非简单请求:**  
       put、delete方法的ajax请求  
       发送json格式的ajax请求  
       自定义头的ajax请求  
