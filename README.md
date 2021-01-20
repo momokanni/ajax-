@@ -54,6 +54,7 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
       方法：GET，POST，HEAD  
       请求header里无自定义头，Content-Type为：application/x-www-from-urlencoded,multipart/from-data,text/plain  
     **非简单请求:**  
+      会先发送一条**预检命令**，当预检命令请求通过以后，第二次才会发送真正的请求，浏览器-network查看  
       put、delete方法的ajax请求  
       发送json格式的ajax请求  
       自定义头的ajax请求  
@@ -61,7 +62,7 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
     
     实现方式：  
       1. 服务器配置    
-      ```  
+      ```   
         @Bean  
         public FilterRegistrationBean registerFilter() {
           FilterRegistrationBean bean = new FilterRegistrationBean();
@@ -77,11 +78,14 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
               HttpServletResponse resp = (HttpServletResponse)response;
               resp.addHeader("Access-Control-Alow-Origin","*");
               resp.addHeader("Access-Control-Alow-Methods","GET");
-              
+              resp.addHeader("Access-Control-Alow-Headers","Content-Type");
+              // 告知浏览器可以在设定的具体时间内缓存预检命令，不需要重复发送，降低开销。
+              resp.addHeader("Access-Control-Max-Age","3600");
               chain.doFilter(request,response);
           }
         }
-      ```
+      ```  
+      
       2. Nginx配置  
       3. apache配置  
       
