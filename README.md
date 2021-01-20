@@ -57,9 +57,7 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
       会先发送一条**预检命令**，当预检命令请求通过以后，第二次才会发送真正的请求，浏览器-network查看  
       put、delete方法的ajax请求  
       发送json格式的ajax请求  
-      自定义头的ajax请求  
-    
-    
+      自定义头的ajax请求    
     实现方式：  
       1. 服务器配置    
       ```   
@@ -76,11 +74,21 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
           @Override
           public void doFilter(ServletRequest request,ServletResponse response, FilterChain chain) {
               HttpServletResponse resp = (HttpServletResponse)response;
-              resp.addHeader("Access-Control-Alow-Origin","*");
+              HttpServletRequest req = (HttpServletRequest)request;
+              String origin = req.getHeader("Origin");
+              if(StringUtils.isNotEmpty(origin)) {
+                  // 请求来源设置为*，是否就能满足所有的请求？
+                  // 答案：否，不能满足带【被调用方域名的cookie】的请求
+                  // 所以在处理带cookie的请求是，该值需设置为全匹配，不能使用*
+                  resp.addHeader("Access-Control-Alow-Origin",origin);
+              }           
               resp.addHeader("Access-Control-Alow-Methods","GET");
               resp.addHeader("Access-Control-Alow-Headers","Content-Type");
               // 告知浏览器可以在设定的具体时间内缓存预检命令，不需要重复发送，降低开销。
               resp.addHeader("Access-Control-Max-Age","3600");
+              
+              // enable cookie
+              resp.addHeader("Access-Control-Alow-Credentials","true");
               chain.doFilter(request,response);
           }
         }
