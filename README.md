@@ -60,7 +60,8 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
       自定义头的ajax请求    
     实现方式：  
       1. 服务器配置    
-      ```   
+      ```  
+      
         @Bean  
         public FilterRegistrationBean registerFilter() {
           FilterRegistrationBean bean = new FilterRegistrationBean();
@@ -94,10 +95,25 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
         }
       ```  
       
-      2. Nginx配置  
+      2. Nginx配置    
+        ```  
+          location /{
+            add_header: Access-Control-Alow-Methods *;
+            add_header: Access-Control-Alow-Origin $http_origin;
+            ...
+            if ($request_method = OPTIONS) {
+                return 200;
+            }
+          }  
+          
+          nginx reload
+        ```  
+        
       3. apache配置  
+      4. spring框架解决方案  
+        @CrossOrigin: 方法 or 类  
+      
+      
       
 >4. 调用方发出请求经过代理进行域名转换（隐藏跨域）
-
-
-Jasmine
+    当无法修改被调用方时，使用代理形式进行隐藏跨域：niginx转发
