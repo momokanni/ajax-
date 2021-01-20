@@ -36,17 +36,17 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
         // 则返回数据为：callback=js脚本, callback值为函数名称，返回值json对象做为函数入参。
         super("callback");
       }
-  }
-```  
-   **注：**  使用jsonp是需要后台进行代码改动的，如果后端继续返回json对象格式数据，前端会报错。  
+  }  
+  
+  **注：**  使用jsonp是需要后台进行代码改动的，如果后端继续返回json对象格式数据，前端会报错。  
    JSONP原理：  
       1. 浏览器F12打开network可查看jsonp请求的请求方式Type为: script.  
       2. Content-type : applcation/javascript侧面印证返回的是js脚本，有别于普通请求返回的applcation/json  
    JSONP缺点：
       1. 服务器需要改动  
       2. 只支持GET请求
-      3. 请求方式不是XHR：会导致异步等特性，jsonp不支持  
-            
+      3. 请求方式不是XHR：会导致异步等特性，jsonp不支持 
+```            
 >3. 被调用方支持跨域。  
     由被调用的服务器在响应头中增加响应字段，告知浏览器允许请求跨域。直接从浏览器发起请求。  
     **注：** 此解决方式下，浏览器判断是否为简单请求，是则**先执行后判断**，就是请求会正常发送到服务器，服务器响应也是正常200，后续的跨域问题由浏览器校验判断Response Header中有无Origin得出。     简单请求: 
