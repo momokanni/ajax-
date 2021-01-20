@@ -48,9 +48,43 @@ Jsonp(JSON with Padding) 是 json 的一种"使用模式"，可以让网页从�
       3. 请求方式不是XHR：会导致异步等特性，jsonp不支持  
             
 >3. 被调用方支持跨域。  
-    1. 在响应头中增加响应字段，告知浏览器允许请求跨域。  
-    2. 
->4. 调用方发出请求经过代理进行域名转换
+    由被调用的服务器在响应头中增加响应字段，告知浏览器允许请求跨域。直接从浏览器发起请求。  
+    **注：** 此解决方式下，浏览器判断是否为简单请求，是则**先执行后判断**，就是请求会正常发送到服务器，服务器响应也是正常200，后续的跨域问题由浏览器校验判断Response Header中有无Origin得出。     简单请求: 
+      方法：GET，POST，HEAD  
+      请求header里无自定义头，Content-Type为：application/x-www-from-urlencoded,multipart/from-data,text/plain  
+    非简单请求:  
+      put、delete方法的ajax请求  
+      发送json格式的ajax请求  
+      自定义头的ajax请求  
+    
+    
+    实现方式：  
+      1. 服务器配置    
+      ```  
+        @Bean  
+        public FilterRegistrationBean registerFilter() {
+          FilterRegistrationBean bean = new FilterRegistrationBean();
+          bean.addUrlPatterns("/*");
+          bean.setFilter(new CrosFilter());
+          return bean;
+        }
+        
+        public class CrosFilter implements Filter {
+          ... 
+          @Override
+          public void doFilter(ServletRequest request,ServletResponse response, FilterChain chain) {
+              HttpServletResponse resp = (HttpServletResponse)response;
+              resp.addHeader("Access-Control-Alow-Origin","*");
+              resp.addHeader("Access-Control-Alow-Methods","GET");
+              
+              chain.doFilter(request,response);
+          }
+        }
+      ```
+      2. Nginx配置  
+      3. apache配置  
+      
+>4. 调用方发出请求经过代理进行域名转换（隐藏跨域）
 
 
 Jasmine
